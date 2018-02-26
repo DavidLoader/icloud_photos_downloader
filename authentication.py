@@ -16,22 +16,21 @@ def authenticate(username, password, \
             # If running in the background, send a notification email.
             send_two_step_expired_notification(smtp_username, smtp_password, \
                 smtp_host, smtp_port, smtp_no_tls, notification_email)
-            exit()
 
-        print("Two-factor authentication required. Your trusted devices are:")
+        #print("Two-factor authentication required. Your trusted devices are:")
 
-        devices = icloud.trusted_devices
-        for i, device in enumerate(devices):
-            print("  %s: %s" % (i, device.get('deviceName',
-                "SMS to %s" % device.get('phoneNumber'))))
+        #devices = icloud.trusted_devices
+        #for i, device in enumerate(devices):
+        #    print("  %s: %s" % (i, device.get('deviceName',
+        #        "SMS to %s" % device.get('phoneNumber'))))
 
-        device = click.prompt('Which device would you like to use?', default=0)
-        device = devices[device]
+        #device = click.prompt('Which device would you like to use?', default=0)
+        #device = devices[device]
         #if not icloud.send_verification_code(device):
         #    print("Failed to send verification code")
         #    sys.exit(1)
 
-        code = click.prompt('Please enter validation code')
+        code = click.prompt('Two-factor authentication required. Please enter validation code')
         if not icloud.validate_verification_code(dict(), code):
             print("Failed to verify verification code")
             sys.exit(1)
