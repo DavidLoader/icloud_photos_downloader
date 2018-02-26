@@ -86,7 +86,7 @@ def download(directory, username, password, size, recent, \
 
     if not notification_email:
         notification_email = smtp_username
-
+    print("Authenticating now..")
     icloud = authenticate(username, password, \
         smtp_username, smtp_password, smtp_host, smtp_port, smtp_no_tls, notification_email)
 
@@ -146,15 +146,23 @@ def download(directory, username, password, size, recent, \
 
                 download_path = local_download_path(photo, size, download_dir)
                 if os.path.isfile(download_path):
-                    if until_found is not None:
-                        consecutive_files_found += 1
-                    if not only_print_filenames:
-                        progress_bar.set_description("%s already exists." % truncate_middle(download_path, 96))
-                    break
+                    # get file size of local photo
+                    filestats = os.stat(download_path)
+                    filesize = filestats.st_size
+                    if filesize != photo.size and size == 'original':
+                        print("Incomplete download, deleting now - %s" % download_path)
+                        os.remove(download_path)
+                    else:
+                        if until_found is not None:
+                            consecutive_files_found += 1
+                        if not only_print_filenames:
+                            progress_bar.set_description("%s already exists." % truncate_middle(download_path, 96))
+                        break
 
                 if only_print_filenames:
                     print(download_path)
                 else:
+                    print("Downloading %s now.." % photo.filename)
                     download_photo(photo, download_path, size, force_size, download_dir, progress_bar)
 
                 if until_found is not None:

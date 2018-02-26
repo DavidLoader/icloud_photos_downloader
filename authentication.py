@@ -7,9 +7,9 @@ def authenticate(username, password, \
     smtp_username, smtp_password, smtp_host, smtp_port, smtp_no_tls, \
     notification_email):
     if password:
-      icloud = PyiCloudService(username, password)
+        icloud = PyiCloudService(username,password)
     else:
-      icloud = PyiCloudService(username)
+        icloud = PyiCloudService(username)
 
     if icloud.requires_2sa:
         if smtp_username and smtp_password:
@@ -27,12 +27,12 @@ def authenticate(username, password, \
 
         device = click.prompt('Which device would you like to use?', default=0)
         device = devices[device]
-        if not icloud.send_verification_code(device):
-            print("Failed to send verification code")
-            sys.exit(1)
+        #if not icloud.send_verification_code(device):
+        #    print("Failed to send verification code")
+        #    sys.exit(1)
 
         code = click.prompt('Please enter validation code')
-        if not icloud.validate_verification_code(device, code):
+        if not icloud.validate_verification_code(dict(), code):
             print("Failed to verify verification code")
             sys.exit(1)
 
